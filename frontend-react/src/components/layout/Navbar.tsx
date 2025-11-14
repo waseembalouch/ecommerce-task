@@ -69,6 +69,10 @@ export const Navbar = () => {
 
           {isAuthenticated ? (
             <>
+              <Button color="inherit" component={Link} to="/orders">
+                Orders
+              </Button>
+
               {/* Cart Icon with Badge */}
               <IconButton
                 color="inherit"
