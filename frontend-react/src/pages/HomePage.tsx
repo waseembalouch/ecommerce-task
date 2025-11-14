@@ -6,11 +6,12 @@ export const HomePage = () => {
   const { isAuthenticated, user } = useAuthStore();
 
   return (
-    <Container>
+    <Container maxWidth="lg">
       <Box
         sx={{
           textAlign: 'center',
           py: 8,
+          px: 3,
         }}
       >
         <Typography variant="h2" component="h1" gutterBottom>

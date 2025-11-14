@@ -126,7 +126,7 @@ export const CartPage = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ py: 4, px: 3 }}>
       {/* Header */}
       <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
@@ -151,7 +151,7 @@ export const CartPage = () => {
       {/* Cart Content */}
       <Grid container spacing={3}>
         {/* Cart Items */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Box>
             {cart.items.map((item) => (
               <CartItem key={item.product.id} item={item} />
@@ -160,7 +160,7 @@ export const CartPage = () => {
         </Grid>
 
         {/* Cart Summary */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CartSummary cart={cart} />
         </Grid>
       </Grid>

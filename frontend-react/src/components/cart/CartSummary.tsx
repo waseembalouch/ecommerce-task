@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { ShoppingCart as CartIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { Cart } from '../../types/api';
+import type { Cart } from '../../types/api';
 
 interface CartSummaryProps {
   cart: Cart;

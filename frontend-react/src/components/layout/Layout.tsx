@@ -6,13 +6,12 @@ export const Layout = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
-      <Container
+      <Box
         component="main"
-        maxWidth="xl"
-        sx={{ flexGrow: 1, py: 4 }}
+        sx={{ flexGrow: 1 }}
       >
         <Outlet />
-      </Container>
+      </Box>
       <Box
         component="footer"
         sx={{

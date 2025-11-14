@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Grid,
@@ -66,14 +66,14 @@ export const ProductsPage = () => {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ py: 4, px: 3 }}>
       <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
         Products
       </Typography>
 
       <Grid container spacing={3}>
         {/* Filters Sidebar */}
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <ProductFilters
             search={filters.search}
             onSearchChange={handleSearchChange}
@@ -87,7 +87,7 @@ export const ProductsPage = () => {
         </Grid>
 
         {/* Products Grid */}
-        <Grid item xs={12} md={9}>
+        <Grid size={{ xs: 12, md: 9 }}>
           {isLoading ? (
             <Box
               sx={{
@@ -109,7 +109,7 @@ export const ProductsPage = () => {
 
               <Grid container spacing={3}>
                 {data.data.map((product) => (
-                  <Grid item xs={12} sm={6} lg={4} key={product.id}>
+                  <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={product.id}>
                     <ProductCard product={product} />
                   </Grid>
                 ))}

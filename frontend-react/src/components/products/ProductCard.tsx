@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { ShoppingCart as CartIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { Product } from '../../types/api';
+import type { Product } from '../../types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cartService } from '../../services/cartService';
 import { useAuthStore } from '../../stores/authStore';

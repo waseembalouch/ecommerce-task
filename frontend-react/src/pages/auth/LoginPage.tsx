@@ -40,10 +40,10 @@ export const LoginPage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8, mb: 4 }}>
-        <Card>
-          <CardContent sx={{ p: 4 }}>
+    <Container component="main" maxWidth="sm">
+      <Box sx={{ py: 8 }}>
+        <Card sx={{ maxWidth: 600, mx: 'auto' }}>
+          <CardContent sx={{ p: 6 }}>
             <Typography variant="h4" component="h1" gutterBottom align="center">
               Login
             </Typography>

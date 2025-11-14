@@ -9,7 +9,7 @@ import {
   Typography,
   Alert,
   Link as MuiLink,
-  Grid,
+  Stack,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
@@ -70,10 +70,10 @@ export const RegisterPage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8, mb: 4 }}>
-        <Card>
-          <CardContent sx={{ p: 4 }}>
+    <Container component="main" maxWidth="sm">
+      <Box sx={{ py: 8 }}>
+        <Card sx={{ maxWidth: 600, mx: 'auto' }}>
+          <CardContent sx={{ p: 6 }}>
             <Typography variant="h4" component="h1" gutterBottom align="center">
               Register
             </Typography>
@@ -85,29 +85,25 @@ export const RegisterPage = () => {
             )}
 
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="First Name"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Last Name"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                  />
-                </Grid>
-              </Grid>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
+                <TextField
+                  fullWidth
+                  label="First Name"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                  autoFocus
+                />
+                <TextField
+                  fullWidth
+                  label="Last Name"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </Stack>
 
               <TextField
                 fullWidth

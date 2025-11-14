@@ -1,5 +1,5 @@
 import api from './api';
-import { ApiResponse, PaginatedResponse, Product } from '../types/api';
+import type { ApiResponse, PaginatedResponse, Product } from '../types/api';
 
 interface GetProductsParams {
   page?: number;

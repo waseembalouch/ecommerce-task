@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { CartItem as CartItemType } from '../../types/api';
+import type { CartItem as CartItemType } from '../../types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cartService } from '../../services/cartService';
 

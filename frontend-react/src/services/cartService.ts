@@ -1,5 +1,5 @@
 import api from './api';
-import { ApiResponse, Cart } from '../types/api';
+import type { ApiResponse, Cart } from '../types/api';
 
 export const cartService = {
   // Get cart
