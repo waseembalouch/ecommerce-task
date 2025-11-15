@@ -10,7 +10,9 @@ interface CreateReviewData {
 export const reviewService = {
   // Get reviews for a product
   getProductReviews: async (productId: string): Promise<Review[]> => {
-    const response = await api.get<ApiResponse<Review[]>>(`/products/${productId}/reviews`);
+    const response = await api.get<ApiResponse<Review[]>>(`/reviews`, {
+      params: { productId }
+    });
     return response.data.data;
   },
 
