@@ -26,8 +26,8 @@ export interface Product {
   name: string;
   slug: string;
   description: string;
-  price: string;
-  comparePrice?: string;
+  price: number;
+  comparePrice?: number;
   sku: string;
   categoryId: string;
   stock: number;
@@ -62,16 +62,22 @@ export interface Cart {
   items: CartItem[];
   totalItems: number;
   subtotal: number;
+  totalAmount: number;
 }
 
 export interface Address {
   id: string;
   userId: string;
+  fullName: string;
+  addressLine1: string;
+  addressLine2?: string;
   street: string;
   city: string;
   state: string;
+  postalCode: string;
   zipCode: string;
   country: string;
+  phone: string;
   isDefault: boolean;
 }
 
@@ -90,10 +96,16 @@ export interface Order {
   userId: string;
   orderNumber: string;
   status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+  paymentStatus: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
+  paymentMethod: string;
   subtotal: string;
+  subtotalAmount: number;
   tax: string;
+  taxAmount: number;
   shipping: string;
+  shippingAmount: number;
   total: string;
+  totalAmount: number;
   shippingAddressId: string;
   shippingAddress?: Address;
   items: OrderItem[];

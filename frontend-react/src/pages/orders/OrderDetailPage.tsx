@@ -16,7 +16,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   Stepper,
   Step,
   StepLabel,
@@ -213,7 +212,7 @@ export const OrderDetailPage = () => {
 
       <Grid container spacing={3}>
         {/* Order Items */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" gutterBottom>
@@ -279,7 +278,7 @@ export const OrderDetailPage = () => {
         </Grid>
 
         {/* Order Summary & Details */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           {/* Order Summary */}
           <Card sx={{ mb: 3 }}>
             <CardContent>
@@ -292,19 +291,19 @@ export const OrderDetailPage = () => {
               <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2">Subtotal:</Typography>
                 <Typography variant="body2">
-                  ${parseFloat(order.subtotalAmount || order.totalAmount).toFixed(2)}
+                  ${(order.subtotalAmount || order.totalAmount).toFixed(2)}
                 </Typography>
               </Box>
               <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2">Shipping:</Typography>
                 <Typography variant="body2">
-                  ${parseFloat(order.shippingAmount || '0').toFixed(2)}
+                  ${(order.shippingAmount || 0).toFixed(2)}
                 </Typography>
               </Box>
               <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2">Tax:</Typography>
                 <Typography variant="body2">
-                  ${parseFloat(order.taxAmount || '0').toFixed(2)}
+                  ${(order.taxAmount || 0).toFixed(2)}
                 </Typography>
               </Box>
 
@@ -313,7 +312,7 @@ export const OrderDetailPage = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="h6">Total:</Typography>
                 <Typography variant="h6" color="primary">
-                  ${parseFloat(order.totalAmount).toFixed(2)}
+                  ${order.totalAmount.toFixed(2)}
                 </Typography>
               </Box>
             </CardContent>

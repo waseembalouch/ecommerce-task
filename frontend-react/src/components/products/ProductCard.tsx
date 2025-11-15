@@ -38,8 +38,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     }
   };
 
-  const formatPrice = (price: string) => {
-    return `$${parseFloat(price).toFixed(2)}`;
+  const formatPrice = (price: string | number) => {
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return `$${numPrice.toFixed(2)}`;
   };
 
   const primaryImage = product.images?.find((img) => img.isPrimary)?.url ||
@@ -90,9 +91,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             }}
           />
         )}
-        {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
+        {product.comparePrice && product.comparePrice > product.price && (
           <Chip
-            label={`${Math.round(((parseFloat(product.comparePrice) - parseFloat(product.price)) / parseFloat(product.comparePrice)) * 100)}% OFF`}
+            label={`${Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF`}
             color="secondary"
             size="small"
             sx={{

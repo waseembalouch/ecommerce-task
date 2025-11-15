@@ -112,7 +112,7 @@ export const CheckoutPage = () => {
       items: cart.items.map((item) => ({
         productId: item.product.id,
         quantity: item.quantity,
-        price: parseFloat(item.product.price),
+        price: item.product.price,
       })),
     };
 
@@ -482,7 +482,7 @@ export const CheckoutPage = () => {
                       {item.product.name} x {item.quantity}
                     </Typography>
                     <Typography variant="body2">
-                      ${(parseFloat(item.product.price) * item.quantity).toFixed(2)}
+                      ${(item.product.price * item.quantity).toFixed(2)}
                     </Typography>
                   </Box>
                 ))}

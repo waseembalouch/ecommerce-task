@@ -24,7 +24,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { orderService } from '../../services/orderService';
 import { useAuthStore } from '../../stores/authStore';
-import type { Order } from '../../types/api';
 
 const getStatusColor = (status: string) => {
   const statusColors: Record<string, any> = {
@@ -177,7 +176,7 @@ export const OrdersPage = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" fontWeight={600}>
-                    ${parseFloat(order.totalAmount).toFixed(2)}
+                    ${order.totalAmount.toFixed(2)}
                   </Typography>
                 </TableCell>
                 <TableCell>

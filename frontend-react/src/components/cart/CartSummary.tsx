@@ -24,7 +24,7 @@ export const CartSummary = ({ cart }: CartSummaryProps) => {
 
   const calculateSubtotal = () => {
     return cart.items.reduce((sum, item) => {
-      return sum + (parseFloat(item.product.price) * item.quantity);
+      return sum + (item.product.price * item.quantity);
     }, 0);
   };
 

@@ -12,7 +12,6 @@ import {
   Chip,
   Rating,
   Divider,
-  TextField,
   IconButton,
   Stack,
 } from '@mui/material';
@@ -20,7 +19,6 @@ import {
   Add as AddIcon,
   Remove as RemoveIcon,
   ShoppingCart as CartIcon,
-  Favorite as FavoriteIcon,
   FavoriteBorder as FavoriteBorderIcon,
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -127,11 +125,11 @@ export const ProductDetailPage = () => {
 
       <Grid container spacing={4}>
         {/* Product Images */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <Box
               component="img"
-              src={product.images[selectedImage]?.url || '/placeholder.png'}
+              src={(product.images || [])[selectedImage]?.url || '/placeholder.png'}
               alt={product.name}
               sx={{
                 width: '100%',
@@ -142,9 +140,9 @@ export const ProductDetailPage = () => {
           </Card>
 
           {/* Thumbnail Images */}
-          {product.images.length > 1 && (
+          {(product.images && product.images.length > 1) && (
             <Box sx={{ display: 'flex', gap: 1, mt: 2, flexWrap: 'wrap' }}>
-              {product.images.map((image, index) => (
+              {(product.images || []).map((image, index) => (
                 <Box
                   key={image.id}
                   component="img"
@@ -170,7 +168,7 @@ export const ProductDetailPage = () => {
         </Grid>
 
         {/* Product Details */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Box>
             {/* Product Name */}
             <Typography variant="h4" gutterBottom fontWeight={600}>
@@ -311,13 +309,13 @@ export const ProductDetailPage = () => {
               Product Information
             </Typography>
             <Grid container spacing={3} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body2" color="text.secondary">
                   SKU
                 </Typography>
                 <Typography variant="body1">{product.sku}</Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body2" color="text.secondary">
                   Category
                 </Typography>

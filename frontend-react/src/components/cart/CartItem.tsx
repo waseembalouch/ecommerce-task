@@ -57,15 +57,16 @@ export const CartItem = ({ item }: CartItemProps) => {
     removeItemMutation.mutate();
   };
 
-  const formatPrice = (price: string) => {
-    return `$${parseFloat(price).toFixed(2)}`;
+  const formatPrice = (price: string | number) => {
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return `$${numPrice.toFixed(2)}`;
   };
 
   const primaryImage = item.product.images?.find((img) => img.isPrimary)?.url ||
                        item.product.images?.[0]?.url ||
                        '/placeholder.png';
 
-  const itemSubtotal = parseFloat(item.product.price) * item.quantity;
+  const itemSubtotal = item.product.price * item.quantity;
 
   return (
     <Card sx={{ mb: 2, p: 2 }}>
