@@ -18,7 +18,6 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  FormLabel,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -188,7 +187,7 @@ export const CheckoutPage = () => {
 
       <Grid container spacing={3}>
         {/* Checkout Form */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent sx={{ p: 4 }}>
               {/* Step 1: Shipping Address */}
@@ -199,7 +198,7 @@ export const CheckoutPage = () => {
                   </Typography>
 
                   <Grid container spacing={2} sx={{ mt: 1 }}>
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                       <TextField
                         fullWidth
                         label="Full Name"
@@ -210,7 +209,7 @@ export const CheckoutPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                       <TextField
                         fullWidth
                         label="Address Line 1"
@@ -221,7 +220,7 @@ export const CheckoutPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                       <TextField
                         fullWidth
                         label="Address Line 2 (Optional)"
@@ -231,7 +230,7 @@ export const CheckoutPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <TextField
                         fullWidth
                         label="City"
@@ -242,7 +241,7 @@ export const CheckoutPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <TextField
                         fullWidth
                         label="State/Province"
@@ -253,7 +252,7 @@ export const CheckoutPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <TextField
                         fullWidth
                         label="Postal Code"
@@ -264,7 +263,7 @@ export const CheckoutPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <TextField
                         fullWidth
                         label="Country"
@@ -275,7 +274,7 @@ export const CheckoutPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                       <TextField
                         fullWidth
                         label="Phone Number"
@@ -326,7 +325,7 @@ export const CheckoutPage = () => {
 
                   {paymentMethod.type === 'card' && (
                     <Grid container spacing={2}>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextField
                           fullWidth
                           label="Card Number"
@@ -338,7 +337,7 @@ export const CheckoutPage = () => {
                           }
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextField
                           fullWidth
                           label="Cardholder Name"
@@ -349,7 +348,7 @@ export const CheckoutPage = () => {
                           }
                         />
                       </Grid>
-                      <Grid item xs={12} sm={6}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <TextField
                           fullWidth
                           label="Expiry Date"
@@ -361,7 +360,7 @@ export const CheckoutPage = () => {
                           }
                         />
                       </Grid>
-                      <Grid item xs={12} sm={6}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <TextField
                           fullWidth
                           label="CVV"
@@ -463,7 +462,7 @@ export const CheckoutPage = () => {
         </Grid>
 
         {/* Order Summary */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card sx={{ position: 'sticky', top: 20 }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
