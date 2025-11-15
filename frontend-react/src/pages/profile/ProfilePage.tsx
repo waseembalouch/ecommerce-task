@@ -53,7 +53,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`profile-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ py: 3 }}}>{children}</Box>}
+      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
     </div>
   );
 }
