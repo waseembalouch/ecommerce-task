@@ -1,5 +1,5 @@
 import api from './api';
-import type { ApiResponse, PaginatedResponse, Order } from '../types/api';
+import type { ApiResponse, Order } from '../types/api';
 
 export const orderService = {
   // Get user's orders

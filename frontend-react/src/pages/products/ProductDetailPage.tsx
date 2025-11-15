@@ -28,6 +28,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { productService } from '../../services/productService';
 import { cartService } from '../../services/cartService';
 import { useAuthStore } from '../../stores/authStore';
+import { ProductReviews } from '../../components/products/ProductReviews';
 
 export const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -327,18 +328,13 @@ export const ProductDetailPage = () => {
         </Card>
       </Box>
 
-      {/* Reviews Section - Placeholder for now */}
+      {/* Reviews Section */}
       <Box sx={{ mt: 4 }}>
-        <Card>
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="h5" gutterBottom fontWeight={600}>
-              Customer Reviews
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Reviews feature coming soon...
-            </Typography>
-          </CardContent>
-        </Card>
+        <ProductReviews
+          productId={product.id}
+          averageRating={product.averageRating || 0}
+          reviewCount={product.reviewCount || 0}
+        />
       </Box>
     </Container>
   );

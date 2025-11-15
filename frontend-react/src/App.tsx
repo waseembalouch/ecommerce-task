@@ -15,6 +15,7 @@ import { CartPage } from './pages/cart/CartPage';
 import { CheckoutPage } from './pages/checkout/CheckoutPage';
 import { OrdersPage } from './pages/orders/OrdersPage';
 import { OrderDetailPage } from './pages/orders/OrderDetailPage';
+import { ProfilePage } from './pages/profile/ProfilePage';
 
 // Create React Query client
 const queryClient = new QueryClient({
@@ -49,6 +50,7 @@ function App() {
               <Route path="checkout" element={<CheckoutPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="orders/:id" element={<OrderDetailPage />} />
+              <Route path="profile" element={<ProfilePage />} />
             </Route>
           </Routes>
         </BrowserRouter>
