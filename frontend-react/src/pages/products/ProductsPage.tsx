@@ -103,7 +103,7 @@ export const ProductsPage = () => {
             <>
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body2" color="text.secondary">
-                  Showing {data.data.length} of {data.meta.total} products
+                  Showing {data.data.length} of {data.pagination.total} products
                 </Typography>
               </Box>
 
@@ -117,7 +117,7 @@ export const ProductsPage = () => {
 
               <Pagination
                 page={filters.page}
-                totalPages={data.meta.totalPages}
+                totalPages={data.pagination.totalPages}
                 onChange={handlePageChange}
               />
             </>
