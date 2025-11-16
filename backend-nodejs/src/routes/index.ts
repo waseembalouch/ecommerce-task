@@ -6,6 +6,8 @@ import cartRoutes from './cart.routes';
 import orderRoutes from './order.routes';
 import addressRoutes from './address.routes';
 import reviewRoutes from './review.routes';
+import userRoutes from './user.routes';
+import adminRoutes from './admin.routes';
 
 const router = Router();
 
@@ -16,9 +18,11 @@ router.use('/cart', cartRoutes);
 router.use('/orders', orderRoutes);
 router.use('/addresses', addressRoutes);
 router.use('/reviews', reviewRoutes);
+router.use('/users', userRoutes);
+router.use('/admin', adminRoutes);
 
 // Health check
-router.get('/health', (req, res) => {
+router.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
