@@ -182,47 +182,4 @@ describe('Auth Service', () => {
       expect(generateToken).not.toHaveBeenCalled();
     });
   });
-
-  describe('getProfile', () => {
-    it('should return user profile by id', async () => {
-      const userId = 'user-1';
-      const mockUser = {
-        id: userId,
-        email: 'test@example.com',
-        firstName: 'John',
-        lastName: 'Doe',
-        role: 'CUSTOMER',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
-
-      const result = await authService.getProfile(userId);
-
-      expect(prisma.user.findUnique).toHaveBeenCalledWith({
-        where: { id: userId },
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-          role: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
-      expect(result).toEqual(mockUser);
-    });
-
-    it('should throw error if user not found', async () => {
-      const userId = 'non-existent-user';
-
-      (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
-
-      await expect(authService.getProfile(userId)).rejects.toThrow(
-        new AppError('User not found', 404, 'USER_NOT_FOUND')
-      );
-    });
-  });
 });

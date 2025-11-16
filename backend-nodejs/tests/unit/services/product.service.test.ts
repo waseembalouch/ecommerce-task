@@ -71,8 +71,10 @@ describe('Product Service', () => {
 
       (prisma.product.findUnique as any).mockResolvedValue(existingProduct);
 
-      await expect(productService.createProduct(validProductData)).rejects.toThrow(AppError);
-      await expect(productService.createProduct(validProductData)).rejects.toThrow('Product with this slug already exists');
+      await expect(productService.createProduct(validProductData)).rejects.toMatchObject({
+        message: 'Product with this slug already exists',
+        statusCode: 400,
+      });
     });
 
     it('should throw error if SKU already exists', async () => {
@@ -85,8 +87,10 @@ describe('Product Service', () => {
         .mockResolvedValueOnce(null) // slug check passes
         .mockResolvedValueOnce(existingProduct); // sku check fails
 
-      await expect(productService.createProduct(validProductData)).rejects.toThrow(AppError);
-      await expect(productService.createProduct(validProductData)).rejects.toThrow('Product with this SKU already exists');
+      await expect(productService.createProduct(validProductData)).rejects.toMatchObject({
+        message: 'Product with this SKU already exists',
+        statusCode: 400,
+      });
     });
 
     it('should throw error if category not found', async () => {
@@ -95,8 +99,10 @@ describe('Product Service', () => {
         .mockResolvedValueOnce(null); // sku check
       (prisma.category.findUnique as any).mockResolvedValue(null);
 
-      await expect(productService.createProduct(validProductData)).rejects.toThrow(AppError);
-      await expect(productService.createProduct(validProductData)).rejects.toThrow('Category not found');
+      await expect(productService.createProduct(validProductData)).rejects.toMatchObject({
+        message: 'Category not found',
+        statusCode: 404,
+      });
     });
   });
 
@@ -233,8 +239,10 @@ describe('Product Service', () => {
 
       (prisma.product.findUnique as any).mockResolvedValue(null);
 
-      await expect(productService.getProductById(productId)).rejects.toThrow(AppError);
-      await expect(productService.getProductById(productId)).rejects.toThrow('Product not found');
+      await expect(productService.getProductById(productId)).rejects.toMatchObject({
+        message: 'Product not found',
+        statusCode: 404,
+      });
     });
   });
 
@@ -270,8 +278,10 @@ describe('Product Service', () => {
     it('should throw error if product not found', async () => {
       (prisma.product.findUnique as any).mockResolvedValue(null);
 
-      await expect(productService.updateProduct(productId, updateData)).rejects.toThrow(AppError);
-      await expect(productService.updateProduct(productId, updateData)).rejects.toThrow('Product not found');
+      await expect(productService.updateProduct(productId, updateData)).rejects.toMatchObject({
+        message: 'Product not found',
+        statusCode: 404,
+      });
     });
 
     it('should check slug uniqueness when updating', async () => {
@@ -288,8 +298,10 @@ describe('Product Service', () => {
         .mockResolvedValueOnce(existingProduct) // initial product check
         .mockResolvedValueOnce({ id: 'other-product', slug: 'new-slug' }); // slug exists check
 
-      await expect(productService.updateProduct(productId, updateWithSlug)).rejects.toThrow(AppError);
-      await expect(productService.updateProduct(productId, updateWithSlug)).rejects.toThrow('Product with this slug already exists');
+      await expect(productService.updateProduct(productId, updateWithSlug)).rejects.toMatchObject({
+        message: 'Product with this slug already exists',
+        statusCode: 400,
+      });
     });
   });
 
@@ -337,8 +349,10 @@ describe('Product Service', () => {
     it('should throw error if product not found', async () => {
       (prisma.product.findUnique as any).mockResolvedValue(null);
 
-      await expect(productService.deleteProduct(productId)).rejects.toThrow(AppError);
-      await expect(productService.deleteProduct(productId)).rejects.toThrow('Product not found');
+      await expect(productService.deleteProduct(productId)).rejects.toMatchObject({
+        message: 'Product not found',
+        statusCode: 404,
+      });
     });
   });
 });

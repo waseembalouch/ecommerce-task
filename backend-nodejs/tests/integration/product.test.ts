@@ -4,8 +4,16 @@ import { prisma } from '../../src/config/database';
 import { generateToken } from '../../src/utils/jwt';
 
 describe('Product API Integration Tests', () => {
-  const adminToken = generateToken('admin-user-id', 'ADMIN');
-  const customerToken = generateToken('customer-user-id', 'CUSTOMER');
+  const adminToken = generateToken({
+    userId: 'admin-user-id',
+    email: 'admin@example.com',
+    role: 'ADMIN',
+  });
+  const customerToken = generateToken({
+    userId: 'customer-user-id',
+    email: 'customer@example.com',
+    role: 'CUSTOMER',
+  });
 
   describe('GET /api/products', () => {
     beforeEach(() => {
