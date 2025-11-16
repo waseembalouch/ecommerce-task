@@ -25,4 +25,10 @@ export const orderService = {
     const response = await api.patch<ApiResponse<Order>>(`/orders/${id}/cancel`);
     return response.data.data;
   },
+
+  // Update order status (admin only)
+  updateOrderStatus: async (id: string, status: string): Promise<Order> => {
+    const response = await api.patch<ApiResponse<Order>>(`/orders/${id}/status`, { status });
+    return response.data.data;
+  },
 };

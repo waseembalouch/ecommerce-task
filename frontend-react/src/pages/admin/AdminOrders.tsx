@@ -17,6 +17,7 @@ import {
   Alert,
 } from '@mui/material';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { orderService } from '../../services/orderService';
 
 const STATUS_OPTIONS = [
@@ -56,13 +57,14 @@ export const AdminOrders = () => {
   // Update order status mutation
   const updateStatusMutation = useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string; status: string }) => {
-      // This would need a backend endpoint to update order status
-      // For now, we'll use a placeholder
-      console.log('Update order status:', orderId, status);
-      return Promise.resolve();
+      return orderService.updateOrderStatus(orderId, status);
     },
     onSuccess: () => {
+      toast.success('Order status updated successfully');
       queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error?.message || 'Failed to update order status');
     },
   });
 

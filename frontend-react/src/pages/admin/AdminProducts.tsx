@@ -28,6 +28,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { productService } from '../../services/productService';
 import type { Product } from '../../types/api';
 
@@ -55,7 +56,11 @@ export const AdminProducts = () => {
   const deleteProductMutation = useMutation({
     mutationFn: productService.deleteProduct,
     onSuccess: () => {
+      toast.success('Product deleted successfully');
       queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error?.message || 'Failed to delete product');
     },
   });
 
@@ -68,8 +73,12 @@ export const AdminProducts = () => {
       return productService.createProduct(data);
     },
     onSuccess: () => {
+      toast.success(editingProduct ? 'Product updated successfully' : 'Product created successfully');
       queryClient.invalidateQueries({ queryKey: ['admin-products'] });
       handleCloseDialog();
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error?.message || 'Failed to save product');
     },
   });
 
