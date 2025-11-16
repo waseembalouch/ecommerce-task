@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -16,6 +16,24 @@ import { CheckoutPage } from './pages/checkout/CheckoutPage';
 import { OrdersPage } from './pages/orders/OrdersPage';
 import { OrderDetailPage } from './pages/orders/OrderDetailPage';
 import { ProfilePage } from './pages/profile/ProfilePage';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { AdminProducts } from './pages/admin/AdminProducts';
+import { AdminOrders } from './pages/admin/AdminOrders';
+
+// Admin route guard component
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, user } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user?.role !== 'ADMIN') {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 // Create React Query client
 const queryClient = new QueryClient({
@@ -51,6 +69,11 @@ function App() {
               <Route path="orders" element={<OrdersPage />} />
               <Route path="orders/:id" element={<OrderDetailPage />} />
               <Route path="profile" element={<ProfilePage />} />
+
+              {/* Admin Routes */}
+              <Route path="admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              <Route path="admin/products" element={<AdminRoute><AdminProducts /></AdminRoute>} />
+              <Route path="admin/orders" element={<AdminRoute><AdminOrders /></AdminRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>
