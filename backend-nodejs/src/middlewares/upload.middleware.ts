@@ -6,10 +6,10 @@ import { config } from '../config/env';
 
 // Configure storage
 const storage = multer.diskStorage({
-  destination: (req: Request, file: Express.Multer.File, cb) => {
+  destination: (_req: Request, _file: Express.Multer.File, cb) => {
     cb(null, path.join(config.upload.dir, 'products'));
   },
-  filename: (req: Request, file: Express.Multer.File, cb) => {
+  filename: (_req: Request, file: Express.Multer.File, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const ext = path.extname(file.originalname);
     cb(null, `product-${uniqueSuffix}${ext}`);

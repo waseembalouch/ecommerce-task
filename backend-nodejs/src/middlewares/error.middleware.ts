@@ -4,9 +4,9 @@ import { config } from '../config/env';
 
 export const errorHandler = (
   err: any,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   const statusCode = err.statusCode || 500;
   const code = err.code || 'INTERNAL_SERVER_ERROR';
@@ -22,7 +22,7 @@ export const errorHandler = (
   });
 };
 
-export const notFound = (req: Request, res: Response, next: NextFunction) => {
+export const notFound = (req: Request, _res: Response, next: NextFunction) => {
   const error = new AppError(`Route ${req.originalUrl} not found`, 404, 'NOT_FOUND');
   next(error);
 };
