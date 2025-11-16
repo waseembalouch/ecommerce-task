@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import { theme } from './theme/theme';
 import { useAuthStore } from './stores/authStore';
 import { Layout } from './components/layout/Layout';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
@@ -73,9 +74,9 @@ function App() {
               <Route path="profile" element={<ProfilePage />} />
 
               {/* Admin Routes */}
-              <Route path="admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-              <Route path="admin/products" element={<AdminRoute><AdminProducts /></AdminRoute>} />
-              <Route path="admin/orders" element={<AdminRoute><AdminOrders /></AdminRoute>} />
+              <Route path="admin" element={<AdminRoute><ErrorBoundary><AdminDashboard /></ErrorBoundary></AdminRoute>} />
+              <Route path="admin/products" element={<AdminRoute><ErrorBoundary><AdminProducts /></ErrorBoundary></AdminRoute>} />
+              <Route path="admin/orders" element={<AdminRoute><ErrorBoundary><AdminOrders /></ErrorBoundary></AdminRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>
