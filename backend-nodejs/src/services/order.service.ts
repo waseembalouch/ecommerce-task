@@ -65,13 +65,13 @@ export const createOrder = async (input: CreateOrderInput) => {
     // Check stock again within transaction for consistency
     for (const item of cart.items) {
       const product = await tx.product.findUnique({
-        where: { id: item.productId },
+        where: { id: item.product.id },
         select: { stock: true, isActive: true },
       });
 
       if (!product?.isActive) {
         throw new AppError(
-          `Product ${item.name} is no longer available`,
+          `Product ${item.product.name} is no longer available`,
           400,
           'PRODUCT_UNAVAILABLE'
         );
@@ -79,7 +79,7 @@ export const createOrder = async (input: CreateOrderInput) => {
 
       if (product.stock < item.quantity) {
         throw new AppError(
-          `Insufficient stock for ${item.name}. Available: ${product.stock}`,
+          `Insufficient stock for ${item.product.name}. Available: ${product.stock}`,
           400,
           'INSUFFICIENT_STOCK'
         );
@@ -99,10 +99,10 @@ export const createOrder = async (input: CreateOrderInput) => {
         shippingAddressId,
         items: {
           create: cart.items.map((item) => ({
-            productId: item.productId,
+            productId: item.product.id,
             quantity: item.quantity,
-            price: item.price,
-            total: parseFloat((item.price * item.quantity).toFixed(2)),
+            price: item.product.price,
+            total: parseFloat((item.product.price * item.quantity).toFixed(2)),
           })),
         },
       },
@@ -126,7 +126,7 @@ export const createOrder = async (input: CreateOrderInput) => {
     // Update product stock
     for (const item of cart.items) {
       await tx.product.update({
-        where: { id: item.productId },
+        where: { id: item.product.id },
         data: {
           stock: {
             decrement: item.quantity,
