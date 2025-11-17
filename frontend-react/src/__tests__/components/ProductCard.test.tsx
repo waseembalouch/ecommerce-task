@@ -44,9 +44,7 @@ describe('ProductCard', () => {
       id: 'cat-1',
       name: 'Test Category',
       slug: 'test-category',
-      description: 'Test',
-      parentId: null,
-      createdAt: new Date().toISOString(),
+      
     },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

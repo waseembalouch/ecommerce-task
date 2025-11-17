@@ -1,6 +1,5 @@
 import * as productService from '../../../src/services/product.service';
 import { prisma } from '../../../src/config/database';
-import { AppError } from '../../../src/utils/AppError';
 
 // Mock prisma
 jest.mock('../../../src/config/database', () => ({
