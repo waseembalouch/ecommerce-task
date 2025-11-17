@@ -17,9 +17,21 @@ jest.mock('../../src/config/database', () => ({
   },
 }));
 
+// Mock password utilities
+jest.mock('../../src/utils/password', () => ({
+  comparePassword: jest.fn(),
+  hashPassword: jest.fn(),
+}));
+
+// Mock bcrypt for dynamic imports
+jest.mock('bcrypt', () => ({
+  compare: jest.fn(),
+  hash: jest.fn(),
+}));
+
 describe('User API Integration Tests', () => {
   let authToken: string;
-  const mockUserId = 'user-123';
+  const mockUserId = '550e8400-e29b-41d4-a716-446655440000';
 
   beforeAll(() => {
     // Create a valid JWT token for testing
@@ -109,10 +121,10 @@ describe('User API Integration Tests', () => {
         newPassword: 'NewPassword123',
       };
 
+      const bcrypt = require('bcrypt');
       (prisma.user.findUnique as any).mockResolvedValue(mockUser);
-      const bcrypt = await import('bcrypt');
-      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true as never);
-      jest.spyOn(bcrypt, 'hash').mockResolvedValue('new_hashed_password' as never);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      (bcrypt.hash as jest.Mock).mockResolvedValue('new_hashed_password');
       (prisma.user.update as any).mockResolvedValue(mockUser);
 
       const response = await request(app)
@@ -227,7 +239,7 @@ describe('User API Integration Tests', () => {
           .mockResolvedValueOnce(null);
 
         await request(app)
-          .get('/api/users/invalid-id')
+          .get('/api/users/999e8400-e29b-41d4-a716-446655440099')
           .set('Authorization', `Bearer ${adminToken}`)
           .expect(404);
       });

@@ -3,14 +3,37 @@ import app from '../../src/app';
 import { prisma } from '../../src/config/database';
 import { generateToken } from '../../src/utils/jwt';
 
+// Mock prisma
+jest.mock('../../src/config/database', () => ({
+  prisma: {
+    product: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      count: jest.fn(),
+    },
+    category: {
+      findUnique: jest.fn(),
+    },
+    review: {
+      aggregate: jest.fn(),
+    },
+    user: {
+      findUnique: jest.fn(),
+    },
+  },
+}));
+
 describe('Product API Integration Tests', () => {
   const adminToken = generateToken({
-    userId: 'admin-user-id',
+    userId: '450e8400-e29b-41d4-a716-446655440004',
     email: 'admin@example.com',
     role: 'ADMIN',
   });
   const customerToken = generateToken({
-    userId: 'customer-user-id',
+    userId: '450e8400-e29b-41d4-a716-446655440005',
     email: 'customer@example.com',
     role: 'CUSTOMER',
   });
@@ -23,17 +46,17 @@ describe('Product API Integration Tests', () => {
     it('should return paginated products list', async () => {
       const mockProducts = [
         {
-          id: 'product-1',
+          id: '550e8400-e29b-41d4-a716-446655440001',
           name: 'Product 1',
-          slug: 'product-1',
+          slug: '550e8400-e29b-41d4-a716-446655440001',
           description: 'Description 1',
           price: 99.99,
           sku: 'SKU-001',
-          categoryId: 'cat-1',
+          categoryId: '650e8400-e29b-41d4-a716-446655440002',
           stock: 10,
           isActive: true,
-          category: { id: 'cat-1', name: 'Category 1' },
-          images: [{ id: 'img-1', url: '/image1.jpg', isPrimary: true }],
+          category: { id: '650e8400-e29b-41d4-a716-446655440002', name: 'Category 1' },
+          images: [{ id: '750e8400-e29b-41d4-a716-446655440003', url: '/image1.jpg', isPrimary: true }],
         },
       ];
 
@@ -47,9 +70,9 @@ describe('Product API Integration Tests', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data).toBeDefined();
       expect(Array.isArray(response.body.data)).toBe(true);
-      expect(response.body.meta).toBeDefined();
-      expect(response.body.meta.page).toBe(1);
-      expect(response.body.meta.total).toBe(1);
+      expect(response.body.pagination).toBeDefined();
+      expect(response.body.pagination.page).toBe(1);
+      expect(response.body.pagination.total).toBe(1);
     });
 
     it('should filter products by search query', async () => {
@@ -77,7 +100,7 @@ describe('Product API Integration Tests', () => {
       (prisma.product.count as jest.Mock).mockResolvedValue(0);
 
       const response = await request(app)
-        .get('/api/products?category=electronics')
+        .get('/api/products?category=650e8400-e29b-41d4-a716-446655440002')
         .expect(200);
 
       expect(response.body.success).toBe(true);
@@ -110,9 +133,9 @@ describe('Product API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.meta.page).toBe(2);
-      expect(response.body.meta.limit).toBe(10);
-      expect(response.body.meta.totalPages).toBe(10);
+      expect(response.body.pagination.page).toBe(2);
+      expect(response.body.pagination.limit).toBe(10);
+      expect(response.body.pagination.totalPages).toBe(10);
       expect(prisma.product.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           skip: 10,
@@ -145,27 +168,31 @@ describe('Product API Integration Tests', () => {
 
     it('should return product by id', async () => {
       const mockProduct = {
-        id: 'product-1',
+        id: '550e8400-e29b-41d4-a716-446655440001',
         name: 'Test Product',
         slug: 'test-product',
         description: 'Test description',
         price: 99.99,
         sku: 'TEST-001',
-        categoryId: 'cat-1',
+        categoryId: '650e8400-e29b-41d4-a716-446655440002',
         stock: 10,
         isActive: true,
-        category: { id: 'cat-1', name: 'Category 1' },
+        category: { id: '650e8400-e29b-41d4-a716-446655440002', name: 'Category 1' },
         images: [],
+        _count: { reviews: 5 },
       };
 
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(mockProduct);
+      (prisma.review.aggregate as jest.Mock).mockResolvedValue({
+        _avg: { rating: 4.5 },
+      });
 
       const response = await request(app)
-        .get('/api/products/product-1')
+        .get('/api/products/550e8400-e29b-41d4-a716-446655440001')
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.id).toBe('product-1');
+      expect(response.body.data.id).toBe('550e8400-e29b-41d4-a716-446655440001');
       expect(response.body.data.name).toBe('Test Product');
     });
 
@@ -173,7 +200,7 @@ describe('Product API Integration Tests', () => {
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app)
-        .get('/api/products/non-existent')
+        .get('/api/products/999e8400-e29b-41d4-a716-446655440099')
         .expect(404);
 
       expect(response.body.success).toBe(false);
@@ -188,7 +215,7 @@ describe('Product API Integration Tests', () => {
       description: 'New product description',
       price: 149.99,
       sku: 'NEW-001',
-      categoryId: 'cat-1',
+      categoryId: '650e8400-e29b-41d4-a716-446655440002',
       stock: 50,
     };
 
@@ -198,12 +225,12 @@ describe('Product API Integration Tests', () => {
 
     it('should create product with admin token', async () => {
       const mockUser = {
-        id: 'admin-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440004',
         email: 'admin@example.com',
         role: 'ADMIN',
       };
       const mockProduct = {
-        id: 'product-1',
+        id: '550e8400-e29b-41d4-a716-446655440001',
         ...validProductData,
         isActive: true,
         createdAt: new Date(),
@@ -211,7 +238,13 @@ describe('Product API Integration Tests', () => {
       };
 
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
-      (prisma.product.findUnique as jest.Mock).mockResolvedValue(null);
+      (prisma.product.findUnique as jest.Mock)
+        .mockResolvedValueOnce(null) // slug check
+        .mockResolvedValueOnce(null); // sku check
+      (prisma.category.findUnique as jest.Mock).mockResolvedValue({
+        id: validProductData.categoryId,
+        name: 'Test Category',
+      });
       (prisma.product.create as jest.Mock).mockResolvedValue(mockProduct);
 
       const response = await request(app)
@@ -235,7 +268,7 @@ describe('Product API Integration Tests', () => {
 
     it('should return 403 for non-admin user', async () => {
       const mockUser = {
-        id: 'customer-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440005',
         email: 'customer@example.com',
         role: 'CUSTOMER',
       };
@@ -254,7 +287,7 @@ describe('Product API Integration Tests', () => {
 
     it('should return 400 for invalid data', async () => {
       const mockUser = {
-        id: 'admin-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440004',
         email: 'admin@example.com',
         role: 'ADMIN',
       };
@@ -289,12 +322,12 @@ describe('Product API Integration Tests', () => {
 
     it('should update product with admin token', async () => {
       const mockUser = {
-        id: 'admin-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440004',
         email: 'admin@example.com',
         role: 'ADMIN',
       };
       const existingProduct = {
-        id: 'product-1',
+        id: '550e8400-e29b-41d4-a716-446655440001',
         name: 'Old Name',
         price: 99.99,
       };
@@ -308,7 +341,7 @@ describe('Product API Integration Tests', () => {
       (prisma.product.update as jest.Mock).mockResolvedValue(updatedProduct);
 
       const response = await request(app)
-        .put('/api/products/product-1')
+        .put('/api/products/550e8400-e29b-41d4-a716-446655440001')
         .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(200);
@@ -320,7 +353,7 @@ describe('Product API Integration Tests', () => {
 
     it('should return 404 for non-existent product', async () => {
       const mockUser = {
-        id: 'admin-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440004',
         email: 'admin@example.com',
         role: 'ADMIN',
       };
@@ -329,7 +362,7 @@ describe('Product API Integration Tests', () => {
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app)
-        .put('/api/products/non-existent')
+        .put('/api/products/999e8400-e29b-41d4-a716-446655440099')
         .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(404);
@@ -346,13 +379,14 @@ describe('Product API Integration Tests', () => {
 
     it('should delete product with admin token', async () => {
       const mockUser = {
-        id: 'admin-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440004',
         email: 'admin@example.com',
         role: 'ADMIN',
       };
       const existingProduct = {
-        id: 'product-1',
+        id: '550e8400-e29b-41d4-a716-446655440001',
         name: 'Test Product',
+        _count: { orderItems: 0 },
       };
 
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
@@ -360,7 +394,7 @@ describe('Product API Integration Tests', () => {
       (prisma.product.delete as jest.Mock).mockResolvedValue(existingProduct);
 
       const response = await request(app)
-        .delete('/api/products/product-1')
+        .delete('/api/products/550e8400-e29b-41d4-a716-446655440001')
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
@@ -370,7 +404,7 @@ describe('Product API Integration Tests', () => {
 
     it('should return 403 for non-admin user', async () => {
       const mockUser = {
-        id: 'customer-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440005',
         email: 'customer@example.com',
         role: 'CUSTOMER',
       };
@@ -378,7 +412,7 @@ describe('Product API Integration Tests', () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
       const response = await request(app)
-        .delete('/api/products/product-1')
+        .delete('/api/products/550e8400-e29b-41d4-a716-446655440001')
         .set('Authorization', `Bearer ${customerToken}`)
         .expect(403);
 
@@ -387,7 +421,7 @@ describe('Product API Integration Tests', () => {
 
     it('should return 404 for non-existent product', async () => {
       const mockUser = {
-        id: 'admin-user-id',
+        id: '450e8400-e29b-41d4-a716-446655440004',
         email: 'admin@example.com',
         role: 'ADMIN',
       };
@@ -396,7 +430,7 @@ describe('Product API Integration Tests', () => {
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app)
-        .delete('/api/products/non-existent')
+        .delete('/api/products/999e8400-e29b-41d4-a716-446655440099')
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(404);
 

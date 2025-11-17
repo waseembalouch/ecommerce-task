@@ -23,7 +23,8 @@ jest.mock('../../src/config/database', () => ({
 
 describe('Address API Integration Tests', () => {
   let authToken: string;
-  const mockUserId = 'user-123';
+  const mockUserId = '550e8400-e29b-41d4-a716-446655440000';
+  const mockAddressId = '650e8400-e29b-41d4-a716-446655440001';
 
   beforeAll(() => {
     authToken = jwt.sign(
@@ -38,7 +39,7 @@ describe('Address API Integration Tests', () => {
   });
 
   const mockAddress = {
-    id: 'address-123',
+    id: mockAddressId,
     userId: mockUserId,
     street: '123 Main St',
     city: 'New York',
@@ -180,7 +181,7 @@ describe('Address API Integration Tests', () => {
       (prisma.address.findUnique as any).mockResolvedValue(null);
 
       await request(app)
-        .get('/api/addresses/invalid-id')
+        .get('/api/addresses/999e8400-e29b-41d4-a716-446655440099')
         .set('Authorization', `Bearer ${authToken}`)
         .expect(404);
     });

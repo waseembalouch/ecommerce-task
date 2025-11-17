@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../../src/app';
 import { prisma } from '../../src/config/database';
 import { hashPassword } from '../../src/utils/password';
+import { generateToken } from '../../src/utils/jwt';
 
 describe('Auth API Integration Tests', () => {
   describe('POST /api/auth/register', () => {
@@ -187,8 +188,9 @@ describe('Auth API Integration Tests', () => {
 
   describe('GET /api/auth/me', () => {
     it('should return current user profile with valid token', async () => {
+      const mockUserId = '550e8400-e29b-41d4-a716-446655440000';
       const mockUser = {
-        id: 'user-1',
+        id: mockUserId,
         email: 'test@example.com',
         firstName: 'John',
         lastName: 'Doe',
@@ -199,8 +201,12 @@ describe('Auth API Integration Tests', () => {
 
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
-      // Mock token - in real test you'd generate a valid JWT
-      const token = 'valid-jwt-token';
+      // Generate a valid JWT token
+      const token = generateToken({
+        userId: mockUserId,
+        email: mockUser.email,
+        role: mockUser.role,
+      });
 
       const response = await request(app)
         .get('/api/auth/me')
