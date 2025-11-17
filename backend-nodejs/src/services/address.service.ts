@@ -45,7 +45,7 @@ export const createAddress = async (input: CreateAddressInput) => {
 export const getAddresses = async (userId: string) => {
   const addresses = await prisma.address.findMany({
     where: { userId },
-    orderBy: [{ isDefault: 'desc' }, { createdAt: 'desc' }],
+    orderBy: { isDefault: 'desc' },
   });
 
   return addresses;

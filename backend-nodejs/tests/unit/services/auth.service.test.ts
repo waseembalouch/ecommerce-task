@@ -59,7 +59,11 @@ describe('Auth Service', () => {
           createdAt: true,
         },
       });
-      expect(generateToken).toHaveBeenCalledWith(mockUser.id, mockUser.role);
+      expect(generateToken).toHaveBeenCalledWith({
+        userId: mockUser.id,
+        email: mockUser.email,
+        role: mockUser.role,
+      });
       expect(result).toEqual({
         user: mockUser,
         token: mockToken,
@@ -131,7 +135,11 @@ describe('Auth Service', () => {
         validLoginData.password,
         mockUser.passwordHash
       );
-      expect(generateToken).toHaveBeenCalledWith(mockUser.id, mockUser.role);
+      expect(generateToken).toHaveBeenCalledWith({
+        userId: mockUser.id,
+        email: mockUser.email,
+        role: mockUser.role,
+      });
       expect(result).toEqual({
         user: {
           id: mockUser.id,
@@ -139,7 +147,6 @@ describe('Auth Service', () => {
           firstName: mockUser.firstName,
           lastName: mockUser.lastName,
           role: mockUser.role,
-          createdAt: mockUser.createdAt,
         },
         token: mockToken,
       });
@@ -149,7 +156,7 @@ describe('Auth Service', () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
 
       await expect(authService.login(validLoginData)).rejects.toThrow(
-        new AppError('Invalid email or password', 401, 'INVALID_CREDENTIALS')
+        new AppError('Invalid credentials', 401, 'INVALID_CREDENTIALS')
       );
 
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
@@ -172,7 +179,7 @@ describe('Auth Service', () => {
       (comparePassword as jest.Mock).mockResolvedValue(false);
 
       await expect(authService.login(validLoginData)).rejects.toThrow(
-        new AppError('Invalid email or password', 401, 'INVALID_CREDENTIALS')
+        new AppError('Invalid credentials', 401, 'INVALID_CREDENTIALS')
       );
 
       expect(comparePassword).toHaveBeenCalledWith(
@@ -180,6 +187,65 @@ describe('Auth Service', () => {
         mockUser.passwordHash
       );
       expect(generateToken).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getMe', () => {
+    const userId = 'user-1';
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return user data for valid userId', async () => {
+      const mockUser = {
+        id: userId,
+        email: 'test@example.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        role: 'CUSTOMER',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-15'),
+      };
+
+      (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
+
+      const result = await authService.getMe(userId);
+
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+      expect(result).toEqual(mockUser);
+    });
+
+    it('should throw error if user not found', async () => {
+      (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+
+      await expect(authService.getMe(userId)).rejects.toThrow(
+        new AppError('User not found', 404, 'USER_NOT_FOUND')
+      );
+
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
     });
   });
 });
